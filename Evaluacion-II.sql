@@ -145,7 +145,7 @@ SELECT f.title AS título
 	-- tb puedo hacerlo uniendo 2 tablas conociendo previamente el numero de la categoria 
 	-- primero veo que categoria tiene family
 
-SELECT category_id, name
+SELECT *
 	FROM category
 	WHERE name = 'Family'; -- es category_id 8
     
@@ -198,9 +198,60 @@ SELECT a.first_name AS nombre, a.last_name AS apellido, COUNT(f_a.film_id) AS nu
         GROUP BY nombre, apellido
         HAVING numero_películas >= 5;
         
-/* 22. Encuentra el título de todas las películas que fueron alquiladas por más de 5 días. Utiliza una
- subconsulta para encontrar los rental_ids con una duración superior a 5 días y luego selecciona las
- películas correspondientes */
+/* 22. Encuentra el título de todas las películas que fueron alquiladas por más de 5 días. 
+Utiliza una subconsulta para encontrar los rental_ids con una duración superior a 5 días 
+y luego selecciona las películas correspondientes */
+  -- primero subconsulta rental_id (duración diferencia entre rental_date y return_date)
+        
+VOY X AQUI
+
+
+SELECT title
+	FROM film
+    
+
+        
+SELECT rental_id
+	FROM rental
+    WHERE rental_id BETWEEN rental_date AND return_date > 5
+    
+        
+/* 23. Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría
+ "Horror". Utiliza una subconsulta para encontrar los actores que han actuado en películas de la
+ categoría "Horror" y luego exclúyelos de la lista de actores. */
+
+
+FALTA
+
+
+
+
+/* 24. Encuentra el título de las películas que son comedias y tienen una duración mayor a 180 minutos en la tabla film. */ 
+        -- unir film - film_category - category
+        
+SELECT f.title AS título, f.length AS duración
+	FROM film AS f
+	INNER JOIN film_category AS f_c
+		ON f.film_id = f_c.film_id
+	INNER JOIN category AS cat
+		ON cat.category_id = f_c.category_id
+	WHERE f.length > 180 AND cat.name = 'Comedy';
+    
+    -- tb puedo hacerlo como el de 'Family'; uniendo 2  conociendo previamente el numero de la categoria 
+	-- primero veo que categoria tiene comedia
+    
+SELECT *
+	FROM category
+	WHERE name = 'Comedy'; -- es category_id 5
+    
+SELECT title AS título, f.length AS duración
+	FROM film AS f
+    INNER JOIN film_category AS f_c
+		ON f.film_id = f_c.film_id
+    WHERE f.length > 180 AND f_c.category_id = 5;
+
+    
+
         
     -- ------------------------------------------------------------------------------------------
 -- Testings
