@@ -219,10 +219,41 @@ SELECT rental_id
 /* 23. Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría
  "Horror". Utiliza una subconsulta para encontrar los actores que han actuado en películas de la
  categoría "Horror" y luego exclúyelos de la lista de actores. */
+   
+SELECT *
+	FROM category
+    WHERE name = 'Horror' -- categoria 11
+    
+    
+SELECT a.first_name AS nombre, a.last_name AS apellido
+	FROM actor AS a
+    INNER JOIN film_actor AS f_a
+		ON a.actor_id = f_a.actor_id
+     INNER JOIN film_category  AS f_c
+		ON f_a.film_id = f_c.film_id
+        WHERE f_c.category_id = 11;
+        
 
+SELECT a.first_name AS nombre, a.last_name AS apellido
+	FROM actor AS a
+    WHERE a.actor_id NOT IN (SELECT f_a.actor_id
+								FROM film_actor AS f_a
+								INNER JOIN film_category  AS f_c
+									ON f_a.film_id = f_c.film_id
+									WHERE f_c.category_id = 11);
+    
+    
+  -- forma alternativa sin calcular el category_id; utilizando otro JOIN con la tabla category para filtrar por 'Horror' directamente: 
 
-FALTA
-
+SELECT a.first_name AS nombre, a.last_name AS apellido
+	FROM actor AS a
+    WHERE a.actor_id NOT IN (SELECT f_a.actor_id
+								FROM film_actor AS f_a
+								INNER JOIN film_category  AS f_c
+									ON f_a.film_id = f_c.film_id
+								INNER JOIN category AS c
+									ON f_c.category_id = c.category_id
+                                    WHERE name = 'Horror');
 
 
 
@@ -237,7 +268,7 @@ SELECT f.title AS título, f.length AS duración
 		ON cat.category_id = f_c.category_id
 	WHERE f.length > 180 AND cat.name = 'Comedy';
     
-    -- tb puedo hacerlo como el de 'Family'; uniendo 2  conociendo previamente el numero de la categoria 
+    -- tb se puede hacer como el anterior; uniendo 2 tablas conociendo previamente el numero de la categoria 
 	-- primero veo que categoria tiene comedia
     
 SELECT *
@@ -252,9 +283,8 @@ SELECT title AS título, f.length AS duración
 
     
 
-        
-    -- ------------------------------------------------------------------------------------------
--- Testings
+---------------------------------------------------------------------------------------------
+-- Tests
 
 SELECT * 
 	FROM film
